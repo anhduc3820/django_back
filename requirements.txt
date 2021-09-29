@@ -1,0 +1,10 @@
+asgiref
+django
+django-extensions
+graphviz
+protobuf
+pydot
+pyparsing
+pytz
+six
+sqlparse
