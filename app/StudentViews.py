@@ -61,6 +61,13 @@ def student_view_attendance_post(request):
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
 
+        if not start_date and not end_date:
+            start_date = datetime.date.today().strftime('%Y-%m-%d')
+            end_date = datetime.date.today().strftime('%Y-%m-%d')
+        elif not start_date:
+            start_date = datetime.date.today().strftime('%Y-%m-%d')
+        elif not end_date:
+            end_date = datetime.date.today().strftime('%Y-%m-%d')
         # Parsing the date data into Python object
         start_date_parse = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
         end_date_parse = datetime.datetime.strptime(end_date, '%Y-%m-%d').date()

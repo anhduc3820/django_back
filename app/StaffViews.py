@@ -90,6 +90,9 @@ def staff_apply_leave_save(request):
     else:
         leave_date = request.POST.get('leave_date')
         leave_message = request.POST.get('leave_message')
+        if not leave_date or not leave_message:
+            messages.error(request, "Failed to Apply Leave")
+            return redirect('staff_apply_leave')
 
         staff_obj = Staffs.objects.get(admin=request.user.id)
         try:
@@ -118,6 +121,10 @@ def staff_feedback_save(request):
         return redirect('staff_feedback')
     else:
         feedback = request.POST.get('feedback_message')
+        if not feedback:
+            messages.error(request, "Failed to Send Feedback.")
+            return redirect('staff_feedback')
+
         staff_obj = Staffs.objects.get(admin=request.user.id)
 
         try:
