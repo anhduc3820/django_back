@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import CustomUser, Staffs, Courses, Subjects, Students, SessionYearModel, Attendance, \
     AttendanceReport, LeaveReportStaff, FeedBackStaffs, StudentResult
+import datetime
 
 
 def staff_home(request):
@@ -175,9 +176,7 @@ def save_attendance_data(request):
     session_year_model = SessionYearModel.objects.get(id=session_year_id)
 
     json_student = json.loads(student_ids)
-    # print(dict_student[0]['id'])
 
-    # print(student_ids)
     try:
         # First Attendance Data is Saved on Attendance Model
         attendance = Attendance(subject_id=subject_model, attendance_date=attendance_date,
@@ -187,8 +186,18 @@ def save_attendance_data(request):
         for stud in json_student:
             # Attendance of Individual Student saved on AttendanceReport Model
             student = Students.objects.get(admin=stud['id'])
-            attendance_report = AttendanceReport(student_id=student, attendance_id=attendance, status=stud['status'])
-            attendance_report.save()
+            atten = AttendanceReport.objects.filter(
+                student_id=student,
+                created_at__lte=datetime.datetime.today()
+            ).first()
+            if atten:
+                atten.status = stud['status']
+                atten.save()
+            else:
+                attendance_report = AttendanceReport(student_id=student, attendance_id=attendance,
+                                                     status=stud['status'])
+                attendance_report.save()
+
         return HttpResponse("OK")
     except Exception:
         return HttpResponse("Error")
