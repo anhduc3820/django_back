@@ -7,7 +7,7 @@ class AuthBackEnd(ModelBackend):
         UserModel = get_user_model()
         try:
             user = UserModel.objects.get(email=username)
-        except UserModel.DoesNotExist:
+        except Exception:
             return None
         else:
             if user.check_password(password):
