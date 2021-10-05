@@ -115,6 +115,10 @@ def student_apply_leave_save(request):
         leave_date = request.POST.get('leave_date')
         leave_message = request.POST.get('leave_message')
 
+        if not leave_date or not leave_message:
+            messages.error(request, "Failed to Apply Leave")
+            return redirect('student_apply_leave')
+
         student_obj = Students.objects.get(admin=request.user.id)
         try:
             leave_report = LeaveReportStudent(student_id=student_obj, leave_date=leave_date,
@@ -143,6 +147,9 @@ def student_feedback_save(request):
     else:
         feedback = request.POST.get('feedback_message')
         student_obj = Students.objects.get(admin=request.user.id)
+        if not feedback:
+            messages.error(request, "Failed to Send Feedback.")
+            return redirect('student_feedback')
 
         try:
             add_feedback = FeedBackStudent(student_id=student_obj, feedback=feedback, feedback_reply="")

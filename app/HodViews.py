@@ -9,6 +9,7 @@ import logging
 from .models import CustomUser, Staffs, Courses, Subjects, Students, SessionYearModel, FeedBackStudent, FeedBackStaffs, \
     LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport
 from .forms import AddStudentForm, EditStudentForm
+from core import const
 
 
 _logger = logging.getLogger(__name__)
@@ -717,7 +718,6 @@ def admin_get_attendance_dates(request):
 
     session_model = SessionYearModel.objects.get(id=session_year)
 
-    # students = Students.objects.filter(course_id=subject_model.course_id, session_year_id=session_model)
     attendance = Attendance.objects.filter(subject_id=subject_model, session_year_id=session_model)
 
     # Only Passing Student Id and Student Name Only
@@ -783,9 +783,35 @@ def admin_profile_update(request):
             return redirect('admin_profile')
 
 
-def staff_profile(request):
-    pass
+def reset_profile_staff(request, staff_id):
+    try:
+        user = CustomUser.objects.get(id=staff_id)
+        if not user:
+            _logger.info(f"user not exists with id: {staff_id}")
+            return redirect('manage_staff')
+        password = const.Default.PASSWORD_DEFAULT.value
+        user.set_password(password)
+        user.save()
+        messages.success(request, "Staff Deleted Successfully.")
+        return redirect('manage_staff')
+    except Exception:
+        _logger.exception(f"cannot reset password withid: {staff_id}")
+        messages.error(request, "Failed to Reset Staff.")
+        return redirect('manage_staff')
 
 
-def student_profile(requtest):
-    pass
+def reset_profile_student(request, student_id):
+    try:
+        user = CustomUser.objects.get(id=student_id)
+        if not user:
+            _logger.info(f"user not exists with id: {student_id}")
+            return redirect('manage_student')
+        password = const.Default.PASSWORD_DEFAULT.value
+        user.set_password(password)
+        user.save()
+        messages.success(request, "Reset Student Successfully.")
+        return redirect('manage_student')
+    except Exception:
+        _logger.exception(f"cannot reset password with id: {student_id}")
+        messages.error(request, "Failed to Reset Student.")
+        return redirect('manage_student')

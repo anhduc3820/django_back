@@ -114,28 +114,28 @@ LOGGING = {
     "handlers": {
         "access_file": {
             "class": "logging.FileHandler",
-            "filename": str(os.getenv("PSP_DJANGO_ACCESS_LOG_FILE", "access.log")),
+            "filename": "access.log",
             "formatter": "simple",
         },
         "info_file": {
             "class": "logging.FileHandler",
-            "filename": str(os.getenv("PSP_DJANGO_INFO_LOG_FILE", "info.log")),
+            "filename": "info.log",
             "formatter": "simple",
         },
         "error_file": {
             "level": "ERROR",
             "class": "logging.FileHandler",
-            "filename": str(os.getenv("PSP_DJANGO_ERROR_LOG_FILE", "error.log")),
+            "filename": "error.log",
             "formatter": "simple",
         },
     },
     "loggers": {
         "django": {
             "handlers": ["access_file"],
-            "level": os.getenv("PSP_DJANGO_LOG_LEVEL", "INFO"),
+            "level": "INFO",
             "propagate": True,
         },
-        "apps": {
+        "app": {
             "handlers": ["info_file", "error_file"],
             "level": "INFO",
             "propagate": True,

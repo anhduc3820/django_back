@@ -86,6 +86,7 @@
                                 <td>
                                     <a href="{% url 'edit_staff' staff.admin.id %}" class="btn btn-success">Edit</a> 
                                     <a href="{% url 'delete_staff' staff.admin.id %}" class="btn btn-danger">Delete</a>
+                                    <a href="{% url 'reset_staff' staff.admin.id %}" class="btn btn-danger">Reset</a>
                                 </td>
                                 </tr>
                                 {% endfor %}
